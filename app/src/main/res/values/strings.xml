@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">QRScanner</string>
+
+        <string-array name="planets_array">
+            <item>Installer</item>
+            <item>Admin</item>
+            <item>Maintainer</item>
+        </string-array>
+
+
+</resources>
