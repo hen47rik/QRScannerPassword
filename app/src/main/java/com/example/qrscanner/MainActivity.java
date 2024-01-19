@@ -37,9 +37,7 @@ public class MainActivity extends AppCompatActivity  {
     private static final String CHANNEL_NAME = "Default Channel";
     private static final double OTP_LENGTH = 8;
     Button qrButton, infoButton;
-
     TextView numberCombination, atmName, user, password, history;
-
     PasswordGenerator passwordGenerator = new PasswordGenerator();
     private NotificationManager notificationManager;
     @Override
@@ -55,31 +53,25 @@ public class MainActivity extends AppCompatActivity  {
         user = findViewById(R.id.user);
         password = findViewById(R.id.password);
         history = findViewById(R.id.history);
-        qrButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                IntentIntegrator intentIntegrator = new IntentIntegrator(MainActivity.this);
-                intentIntegrator.setPrompt("Scan a QR Code");
-                intentIntegrator.setOrientationLocked(true);
-                intentIntegrator.initiateScan();
-            }
-        });
-        infoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(MainActivity.this, InfoActivity.class);
-                startActivity(intent);
-            }
-        });
+        qrButton.setOnClickListener(v -> scanQR(v));
+        infoButton.setOnClickListener(v -> infoClick(v));
         this.notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
         }
-
     }
 
+    public void infoClick(View v) {
+        Intent intent = new Intent(MainActivity.this, InfoActivity.class);
+        startActivity(intent);
+    }
+        public void scanQR(View v) {
+            IntentIntegrator intentIntegrator = new IntentIntegrator(MainActivity.this);
+            intentIntegrator.setPrompt("Scan a QR Code");
+            intentIntegrator.setOrientationLocked(true);
+            intentIntegrator.initiateScan();
+        }
     private void sendNotification(String password) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.ic_media_play)
