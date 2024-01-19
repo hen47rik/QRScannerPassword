@@ -32,11 +32,12 @@ import com.google.zxing.integration.android.IntentResult;
 import java.security.SecureRandom;
 
 // implements onClickListener for the onclick behaviour of button
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity  {
     private static final String CHANNEL_ID = "defaultChannel";
     private static final String CHANNEL_NAME = "Default Channel";
     private static final double OTP_LENGTH = 8;
-    Button qrButton;
+    Button qrButton, infoButton;
+
     TextView numberCombination, atmName, user, password, history;
 
 
@@ -46,28 +47,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         qrButton = findViewById(R.id.notify);
+        infoButton = findViewById(R.id.infobutton);
         qrButton.setBackgroundColor(Color.parseColor("#9B0E21"));
+        infoButton.setBackgroundColor(Color.parseColor("#003F69"));
         numberCombination = findViewById(R.id.numberCombination);
         atmName = findViewById(R.id.atmName);
         user = findViewById(R.id.user);
         password = findViewById(R.id.password);
         history = findViewById(R.id.history);
-        qrButton.setOnClickListener(this);
+        qrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IntentIntegrator intentIntegrator = new IntentIntegrator(MainActivity.this);
+                intentIntegrator.setPrompt("Scan a QR Code");
+                intentIntegrator.setOrientationLocked(true);
+                intentIntegrator.initiateScan();
+            }
+        });
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                Intent intent = new Intent(MainActivity.this, InfoActivity.class);
+                startActivity(intent);
+            }
+        });
         this.notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
         }
 
-    }
-
-    @Override
-    public void onClick(View v) {
-        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-        intentIntegrator.setPrompt("Scan a barcode or QR Code");
-        intentIntegrator.setOrientationLocked(true);
-        intentIntegrator.initiateScan();
     }
 
     private void sendNotification(String password) {
