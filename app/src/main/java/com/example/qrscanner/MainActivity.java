@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity  {
 
     TextView numberCombination, atmName, user, password, history;
 
-
+    PasswordGenerator passwordGenerator = new PasswordGenerator();
     private NotificationManager notificationManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,9 +103,9 @@ public class MainActivity extends AppCompatActivity  {
                 numberCombination.setText(numbers);
                 atmName.setText(atm);
                 user.setText(username);
-                String createdpassword = String.valueOf(generatePassword(numbers));
+                String createdpassword = String.valueOf(passwordGenerator.generatePassword(numbers));
                 password.setText(createdpassword);
-                generatePassword(intentResult.getContents());
+                passwordGenerator.generatePassword(intentResult.getContents());
                 history.append(intentResult.getContents());
                 history.append(": " + createdpassword);
                 history.append("\n");
@@ -115,15 +115,7 @@ public class MainActivity extends AppCompatActivity  {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-    private int generatePassword(String password){
-        SecureRandom random = new SecureRandom();
 
-        // Generate a random number with OTP_LENGTH digits
-        int min = (int) Math.pow(10, OTP_LENGTH - 1);
-        int max = (int) Math.pow(10, OTP_LENGTH) - 1;
-
-        return random.nextInt(max - min + 1) + min;
-    }
 }
 
 
